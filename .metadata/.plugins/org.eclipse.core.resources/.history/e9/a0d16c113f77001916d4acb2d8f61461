@@ -1,0 +1,172 @@
+package objectOriented;
+
+public interface payable {
+	double getPaymentAmount();
+}
+
+class invoice implements payable{
+	private String partNumber;
+	private String partDescription;
+	private int quantity;
+	private double pricePerItem;
+	
+	public invoice(String part,String desc,int count,double price){
+		partNumber = part;
+		partDescription = desc;
+		setQuantity(count);
+		setPricePerItem(price);
+	}
+	
+	public void setPartNumber(String part){
+		partNumber = part;
+	}
+	
+	public String getPartNumber(){
+		return partNumber;
+	}
+	
+	public String getPartDescription(){
+		return partDescription;
+	}
+	
+	public void setPartDescription(String desc){
+		partDescription = desc;
+	}
+	
+	public void setQuantity(int count){
+		if(count >=0 )
+			quantity = count;
+		else
+			throw new IllegalArgumentException("Quantity must be >=0");
+	}
+	
+	
+	public int getQuantity(){
+		return quantity;
+	}
+	
+	public void setPricePerItem(double price){
+		if(price >=0.0)
+			pricePerItem = price;
+		else
+			throw new IllegalArgumentException("Price per item must be >= 0");
+	}
+	
+	public double getPricePerItem(){
+		return pricePerItem;
+	}
+	
+	@Override
+	public String toString(){
+		return String.format("%s: \n%s: %s (%s) \n%s: %d \n%s $%,.2f",
+				"invoice","part number",getPartNumber(),getPartDescription(),"quantity",
+				getQuantity(),"price per item",getPricePerItem());
+	}
+	
+	@Override
+	public double getPaymentAmount(){
+		return getQuantity()*getPricePerItem();
+	}
+}
+
+abstract class pEmployee implements payable{
+	private String firstName;
+	private String lastName;
+	private String socSecNum;
+	
+	public pEmployee(String fst, String lst,String ssn){
+		firstName=fst;
+		lastName=lst;
+		socSecNum=ssn;
+	}
+	
+	public void setFirstName(String fst){
+		firstName=fst;
+	}
+	
+	public String getFirstName(){
+		return firstName;
+	}
+	
+	public void setLastName(String last){
+		lastName = last;
+	}
+	
+	public String getlastName(){
+		return lastName;
+	}
+	
+	public void setSocSecNum(String ssn){
+		socSecNum = ssn;
+	}
+	
+	public String getSocSecNum(){
+		return socSecNum;
+	}
+	
+	@Override
+	public String toString(){
+		return String.format("%s %s\nsocial security number: %s", 
+				getFirstName(),getlastName(),getSocSecNum());
+	}
+	
+}
+
+class salariedEmployee extends pEmployee{
+	
+	private double weeklySalary;
+	
+	public salariedEmployee(String fst, String lst, String ssn,double salary) {
+		super(fst, lst, ssn);
+		setWeeklySalary(salary);
+		
+	}
+	
+	public void setWeeklySalary(double salary){
+		if(salary>=0.0)
+			weeklySalary = salary;
+		else
+			throw new IllegalArgumentException("Weekly salary must be >=0.0");
+	}
+	
+	public double getWeeklySalary(){
+		return weeklySalary;
+	}
+	
+	@Override
+	public double getPaymentAmount(){
+		return getWeeklySalary();
+	}
+	
+	@Override
+	public String toString(){
+		return String.format("salaried employee: %s\n5s: $%,.2f", super.toString(),
+				"weekly salary",getWeeklySalary());
+		
+	}
+	
+}
+
+class payableInterfaceTest{
+	
+	public void run(){
+		//creating 4 element payable arr
+		payable[] payableObj = new payable[4];
+		
+		//populate arr with obj that implemrnt payable
+		payableObj[0] = new invoice("01234","seat",2,375.00);
+		payableObj[1] = new invoice("56789","tire",4,475.00);
+		payableObj[2] = new salariedEmployee("John","Smith","111-11-1111",800.00);
+		payableObj[3] = new salariedEmployee("Kings","Adam","222-22-2222",900.00);
+		
+		
+		System.out.println("Invoices and Employees processed polymorphically:\n");
+		
+		// generically process each element in array payableObj
+		for(payable currentPay:payableObj){
+			System.out.printf("%s \n%s:$%,.2f\n\n", currentPay.toString(),
+					"payment due",currentPay.getPaymentAmount());
+		}
+		
+	}
+}

@@ -1,0 +1,140 @@
+//knight's tour on a chess board...
+import java.util.Random;
+import java.util.Scanner;
+
+public class knights {
+	private final int hori=8;
+	private final int vert=8;
+	private int[][] chess = new int[vert][hori];
+	private int[] start = new int[2];
+	private Random ran = new Random();
+	private int[][] access = new int[8][8];
+
+	public knights() {
+	
+	}
+	
+	public void click(int number){
+		
+	}
+	
+	public void move(){
+		start [0]=0;start[1]=0;
+		int count =1;int falsity=1;
+		chess[start[0]][start[1]]=count;
+		int dir = 5;
+		while(falsity<=200){
+			tour(start[0],start[1]);
+			switch(dir){
+			case 0: 
+				if(start[0]-1>=0&&start[1]+2<8&&chess[start[0]-1][start[1]+2]<1){
+				start[0]-=1;
+				start[1]+=2;}
+				break;
+			case 1: 
+				if(start[0]-2>=0&&start[1]+1<8&&chess[start[0]-2][start[1]+1]<1){
+				start[0]-=2;
+				start[1]+=1;}
+				break;
+			case  2: 
+				if(start[0]-2>=0&&start[1]-1>=0&&chess[start[0]-2][start[1]-1]<1){
+				start[0]-=2;
+				start[1]-=1;}
+				break;
+			case 3:
+				if(start[0]-1>=0&&start[1]-2>=0&&chess[start[0]-1][start[1]-2]<1){
+				start[0]-=1;
+				start[1]-=2;}
+				break;
+			case 4:
+				if(start[0]+1<8&&start[1]-2>=0&&chess[start[0]+1][start[1]-2]<1){
+				start[0]+=1;
+				start[1]-=2;}
+				break;
+			case 5:
+				if(start[0]+2<8&&start[1]-1>=0&&chess[start[0]+2][start[1]-1]<1){
+				start[0]+=2;
+				start[1]-=1;}
+				break;
+			case 6:
+				if(start[0]+2<8&&start[1]+1<8&&chess[start[0]+2][start[1]+1]<1){
+				start[0]+=2;
+				start[1]+=1;}
+				break;
+			case 7:
+				if(start[0]+1<8&&start[1]+2<8&&chess[start[0]+1][start[1]+2]<1){
+				start[0]+=1;
+				start[1]+=2;}
+				break;
+				}
+			
+			dir++;
+			if(dir>7)
+				dir=0;
+			if(chess[start[0]][start[1]]<1){
+				chess[start[0]][start[1]]=++count;
+			}
+			else
+				falsity++;
+			
+		}//end while
+	}//end method move 
+	
+	public void board(){
+		for(int i=0;i<chess.length;i++){
+			System.out.print("|");
+			for(int j=0;j<chess[i].length;j++)
+				System.out.printf("%3d   ",chess[i][j]);
+			System.out.println("|\n");
+		}
+		System.out.print("Accessibility status\n\n");
+		for(int i=0;i<access.length;i++){
+			System.out.print("|");
+			for(int j=0;j<access[i].length;j++)
+				System.out.printf("%3d   ",access[i][j]);
+			System.out.println("|\n");
+		}
+	}
+	
+	public void tour(int no1,int no2){
+		int i=0;access[no1][no2]=0;
+		while(i<8){
+			start[0]=no1;start[1]=no2;
+			switch(i){
+			case 0:
+				if(start[0]-1>=0&&start[1]+2<8&&chess[start[0]-1][start[1]+2]<1)
+					access[no1][no2]+=1;
+					break;
+				case 1: 
+					if(start[0]-2>=0&&start[1]+1<8&&chess[start[0]-2][start[1]+1]<1)
+						access[no1][no2]+=1;
+					break;
+				case  2: 
+					if(start[0]-2>=0&&start[1]-1>=0&&chess[start[0]-2][start[1]-1]<1)
+						access[no1][no2]+=1;
+					break;
+				case 3:
+					if(start[0]-1>=0&&start[1]-2>=0&&chess[start[0]-1][start[1]-2]<1)
+						access[no1][no2]+=1;
+					break;
+				case 4:
+					if(start[0]+1<8&&start[1]-2>=0&&chess[start[0]+1][start[1]-2]<1)
+						access[no1][no2]+=1;
+					break;
+				case 5:
+					if(start[0]+2<8&&start[1]-1>=0&&chess[start[0]+2][start[1]-1]<1)
+						access[no1][no2]+=1;
+					break;
+				case 6:
+					if(start[0]+2<8&&start[1]+1<8&&chess[start[0]+2][start[1]+1]<1)
+						access[no1][no2]+=1;
+					break;
+				case 7:
+					if(start[0]+1<8&&start[1]+2<8&&chess[start[0]+1][start[1]+2]<1)
+						access[no1][no2]+=1;
+					break;
+			}i++;
+		}
+	}
+
+}

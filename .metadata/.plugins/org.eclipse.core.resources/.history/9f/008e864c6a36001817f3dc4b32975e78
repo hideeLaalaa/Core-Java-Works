@@ -1,0 +1,134 @@
+import java.util.*;
+
+public class Simpletron {
+	private int accumulator;
+	private int[] memory;
+	private int instRegister;
+	private int instCounter;
+	private int operationCode;
+	private int operand;
+	
+	public Simpletron(){
+		displayMessage();
+		initializeVar();
+	}
+	
+	public void displayMessage(){
+		System.out.println("\n****Welcome to Simpletron!***"
+				+"\n***Please enter your program one instruction"
+				+"\n***or data word at a time into the input***"
+				+"\n***text field. I will display the location"
+				+"\n***number and a question mark. You the ***"
+				+"\n***type the word for that location. Press the"
+				+"\n***Done button to stop entering your program"
+				+"\nLoc Inst"
+				+"\n*** ***");
+	}
+	
+	public void runSimulator(){
+		int submittedInst = 0;
+		int memPointer =0;
+		Scanner in = new Scanner(System.in);
+		
+		do{
+			System.out.printf("%d %s ", memPointer,"?");
+			submittedInst = in.nextInt();
+			if(submittedInst!=-99999)
+				memory[memPointer]=submittedInst;
+			memPointer++;
+		}while(submittedInst!=-99999);
+		System.out.print("***Program loading completed***\n"
+				+ "***Program execution begins***\n");
+		
+		for(int code:memory){
+			if(code!=0){
+				load();
+				execute(operand,operationCode);
+			}
+		}
+	}
+	
+	public void initializeVar(){
+		memory = new int[100];
+		instCounter=0;
+	}
+	
+	public void load(){
+		operationCode = memory[instCounter]/100;
+		operand = memory[instCounter]%100;
+	}
+	
+	public void execute(int operands,int operation){
+		switch(operation){
+		case 10:
+			Scanner in = new Scanner(System.in);
+			System.out.print("Enter a positive or negative whole number:");
+			memory[operands]=in.nextInt();
+			break;
+		case 11:
+			System.out.print("The result of the operation is "+memory[operands]);
+			break;
+		case 20:
+			accumulator = memory[operands];
+			break;
+		case 21:
+			memory[operands]=accumulator;
+			break;
+		case 30:
+			accumulator += memory[operands];
+			break;
+		case 31:
+			accumulator -= memory[operands];
+			break;
+		case 32:
+			accumulator /= memory[operands];
+			break;
+		case 33:
+			accumulator *= memory[operands];
+			break;
+		case 40:
+			instCounter=operands;
+			break;
+		case 41:
+			if(accumulator<0)
+				instCounter=operands;
+			break;
+		case 42:
+			if(accumulator==0)
+				instCounter=operands;
+			break;
+		case 43:
+			dumpTheCore();
+			System.out.printf("s\n%s", "The program has ended....");
+			System.exit(0);
+			break;
+		}instCounter++;
+	}
+	
+	public void dumpTheCore(){
+		System.out.printf("\n%30s\n%30s\t%s%4d\n%30s\t%2d\n%30s\t%2d\n%30s\t%2d\n%30s\t%2d\n\n%30s\n", "REGISTERS:",
+				"accumulator","+",accumulator,"instruction Counter",instCounter,"instruction register",
+				instCounter,"operation code",operationCode,"operand",operand,"MEMORY");
+		for(int i=0;i<10;i++)
+			System.out.printf("%6d",i);
+		int counter=0;
+		for(int i=0;i<10;i++){
+			if(counter%10==0)
+				System.out.printf("%2d",counter);
+			for(int j=0;j<10;j++){
+				if(memory[counter]==0)
+					System.out.printf("%s%s","+","0000");
+				else
+					System.out.printf("%s%4d", "+",memory[counter]);
+				counter++;
+			}
+			System.out.println();
+		}
+	}
+
+	public static void main(String[] args) {
+		
+		new Simpletron().runSimulator();
+	}
+
+}

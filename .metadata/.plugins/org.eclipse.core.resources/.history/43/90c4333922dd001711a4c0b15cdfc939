@@ -1,0 +1,42 @@
+import java.util.Scanner;
+public class Arra {
+
+	public static void main(String[] args)
+	{
+		Scanner in = new Scanner(System.in);
+		int[] array = new int[5];
+		int counter=0;
+		do{
+			System.out.printf("Enter the number: ");
+					int no=in.nextInt();
+					array[counter]=no;
+			if(array[counter]<=100&&array[counter]>=10)
+			{	counter++;
+		//unique(array);
+			}
+			else
+				System.out.println("Number must be between 10 and 100");
+		}while(counter<5);
+		
+	}
+	
+/*	public static void unique(int[] array){
+		System.out.print("Unique numbers so far are: ");
+		int counter =0;boolean stat = true;
+		for (int i=0;i<array.length;i++){
+			for(int j=0;j<array.length;j++){
+				if(i==j)
+					continue;
+				if(array[i]==array[j])
+					stat=false;
+			}
+			if(stat==true&&array[i]!=0)
+				System.out.print(array[i]+"   ");
+			if(i==4)
+				System.out.println();
+				
+		}
+		
+	}*/
+
+}

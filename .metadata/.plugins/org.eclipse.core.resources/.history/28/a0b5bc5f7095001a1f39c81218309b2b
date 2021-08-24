@@ -1,0 +1,590 @@
+import java.util.ArrayList;
+
+
+public class SudokuBoard {
+
+	Column columnRef;
+	Row rowRef;
+	Square squareRef;
+	Box[][][] sudoku = new Box[9][3][3];
+	ArrayList<ArrayList<ArrayList<Integer>>> colMissPosition;
+	ArrayList<ArrayList<ArrayList<Integer>>> rowMissPosition;
+	ArrayList<ArrayList<ArrayList<Integer>>> boxMissPosition;
+	int[][][] sudokuValues =
+	{ 		{{0,2,0},
+			 {5,8,0},
+			 {0,0,0}},
+						{{6,0,8},
+				 		 {0,0,9},
+				 		 {0,4,0}},
+									{{0,0,0},
+				 			 		 {7,0,0},
+				 			 		 {0,0,0}},
+			{{3,7,0},
+			 {6,0,0},
+			 {0,0,8}},
+						{{0,0,0},
+				 		 {0,0,0},
+				 		 {0,0,0}},
+									{{5,0,0},
+									 {0,0,4},
+									 {0,1,3}},
+			{{0,0,0},
+			 {0,0,9},
+			 {0,0,0}},
+						{{0,2,0},
+				 		 {8,0,0},
+				 		 {3,0,6}},
+									{{0,0,0},
+				 			 		 {0,3,6},
+				 			 		 {0,9,0}}
+	};
+	
+	public SudokuBoard() {
+		setSudoku();
+		rowRef= new Row();
+		squareRef = new Square();
+		columnRef = new Column();
+	}
+	
+	
+	public void setSudoku(){
+		for(int x=0;x<sudoku.length;x++){
+			for(int y = 0;y<sudoku[x].length;y++){
+				for(int z = 0;z<sudoku[x][y].length;z++){
+					try {
+						sudoku[x][y][z]=new Box
+								(sudokuValues[x][y][z]);
+					} catch (Exception e) {
+						System.err.println(x+"\t"+y+"\t"+z);
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+	
+	public void printSudoku(){
+		//ArrayList<ArrayList<ArrayList<Integer>>> test = new ArrayList<>();
+		System.out.println("_____________________________________");
+		for(int x = 1;x<10;x++){
+			int hori = ((x<4)?-1:(x<7)?2:5);
+			int y=(x-1)%3;
+			
+			for(int i=1;i<10;i++){
+				if((i-1)%3==0){
+					hori++;
+					System.out.print("| {");}
+				int value = sudoku[hori][y][(i-1)%3].getBoxValue();
+				System.out.printf("%2s", (value>0?Integer.toString(value):""));
+				if(i==9)
+					System.out.print("}|");
+				else if(i%3==0)
+					System.out.print("}");
+				else
+					System.out.print(",");
+				
+			}
+			
+			if(x%3==0)
+				System.out.println("\n-------------------------------------");
+			else
+				System.out.println();
+		} 
+		System.out.println();
+	}
+	
+	public void solve(){
+//		ArrayList<ArrayList<ArrayList<Integer>>> test = new ArrayList<>();
+//		ArrayList<Integer> sum = new ArrayList<>();
+//		ArrayList<Integer> bum = new ArrayList<>();
+//		for(int i=0;i<3;i++)
+//			sum.add(i);
+//		for(int i=3;i<9;i++)
+//			bum.add(i);
+//		test.add(new ArrayList<>());
+//		test.add(new ArrayList<>());
+//		test.get(0).add(bum);
+//		test.get(0).add(sum);
+//		test.get(1).add(sum);
+//		test.get(1).add(bum);
+//		System.out.println(test.get(0));
+
+		System.out.println("\t\tPROBLEM");	
+		printSudoku();
+		while(!full()){
+			for(int x=0;x<sudoku.length;x++){
+				for(int y = 0;y<sudoku[x].length;y++){
+					for(int z = 0;z<sudoku[x][y].length;z++){
+						if(sudoku[x][y][z].isEmpty())
+							try {
+								setBoxMiss(x,y,z);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+					}
+				}
+			}
+			posTactics1();
+			// System.out.println(sudoku[4][1][0].getMissValue());
+		}
+		System.out.println("\t\tSOLUTION");
+		printSudoku();
+
+	}
+	
+	public void updateCol(int col,ArrayList<Integer> pos, ArrayList<Integer> values){
+		int x = col/3;
+		sudoku[x+(pos.get(0)<3?0:pos.get(0)<6?3:6)][pos.get(0)%3][col%3].setMissArray(values);
+		for(int i=0;i<9;i++){
+			if(i%3==0)
+				x+=3;
+			
+			if(sudoku[x][i%3][col%3].isEmpty()&&sudoku[x][i%3][col%3].getMissValue().contains(values))
+				for(int num : no)
+					sudoku[x][i%3][col%3].removeMissValue((Integer)num);
+		}
+		
+	}
+	
+	public void updateTactics2(int box, ArrayList<Integer> pos, ArrayList<Integer> values, int type){
+		
+		switch(type){
+		case 0:{
+			if(pos.get(0)%3==pos.get(1)%3){
+				int col = (box%3)+(pos.get(0)%3);
+				updateCol(col,pos,values);
+			}
+			}
+		break;
+		case 1:{
+		
+		}break;
+		case 2:{
+			
+		}break;
+		
+		}
+	}
+	
+	public void posTactics2(int box, int no ,int type){
+		
+		//TYPE ZERO IS BOX
+		switch(type){
+		case 0:{
+			for(int i=0;i<9;i++){
+				if(i!=no)
+					if(boxMissPosition.get(box).get(no).equals
+						(boxMissPosition.get(box).get(i))){
+						ArrayList<Integer> values = new ArrayList<>(); 
+						values.add((no));
+						values.add((i));
+						ArrayList<Integer> pos = boxMissPosition.get(box).get(i);
+						updateTactics2(box,pos,values,type);
+				}
+			}
+		
+		}break;
+		case 1:{
+		
+		}break;
+		case 2:{
+			
+		}break;
+		
+		}
+		
+	}
+	
+	public void posTactics1(){
+		//THIS TACTICS CHECKS IF A NUMBER CAN ONLY BE FOUND IN ONE POSITION
+		setMissPosition();
+		//CHECKING EACH BOX FOR THIS PATTERN
+		int box = -1;
+		for(ArrayList<ArrayList<Integer>> i : boxMissPosition){
+			box++;
+			int number = -1;
+			for(ArrayList<Integer> j : i){
+				number++;
+				if(j.size()==1){
+					int y= (j.get(0)<3?0:j.get(0)<6?1:2);
+					int z=	(j.get(0)%3);	
+					try {
+						sudoku[box][y][z].setBoxValue(number+1);
+						System.out.println(j);
+						Box.solved++;
+						printSudoku();
+					} catch (Exception e) {
+						System.err.println("Na here");
+					}
+				}
+				else if(j.size()==2){
+					int y= (j.get(0)<3?0:j.get(0)<6?1:2);
+					int z=	(j.get(0)%3);
+					posTactics2(box,number,0);
+				}
+				
+			}
+			
+		}
+		
+		//CHECKING EACH ROW FOR THIS PATTERN
+				int row = -1;
+				for(ArrayList<ArrayList<Integer>> i : rowMissPosition){
+					row++;
+					int number = -1;
+					for(ArrayList<Integer> j : i){
+						number++;
+						if(j.size()==1){
+							int x= (row<3?0:row<6?3:6);
+							x +=( j.get(0)<3?0:j.get(0)<6?1:2 );
+							int z=	(j.get(0)%3);	
+							try {
+								sudoku[x][(row%3)][(z)].setBoxValue(number+1);
+								System.out.println(j);
+								Box.solved++;
+								printSudoku();
+							} catch (Exception e) {
+								System.err.println("Na here");
+							}
+						}
+						
+					}
+					
+				}
+				
+				//CHECKING EACH COLUMN FOR THIS PATTERN
+				int col = -1;
+				for(ArrayList<ArrayList<Integer>> i : colMissPosition){
+					col++;
+					int number = -1;
+					for(ArrayList<Integer> j : i){
+						number++;
+						if(j.size()==1){
+							int x= col/3;
+							x +=( j.get(0)<3?0:j.get(0)<6?3:6 );
+							int y=	(j.get(0)%3);	
+							try {
+								sudoku[x][y][(col%3)].setBoxValue(number+1);
+								System.out.println(j);
+								Box.solved++;
+								printSudoku();
+							} catch (Exception e) {
+								System.err.println("Na here");
+							}
+						}
+						
+					}
+				}
+					
+	}
+	
+	public void setMissPosition(){
+		colMissPosition = new ArrayList<>();
+		rowMissPosition = new ArrayList<>();
+		boxMissPosition = new ArrayList<>();
+		
+		//FOR BOX
+		squareRef.setMissPosition();
+		
+		//FOR HORIZONTAL
+		rowRef.setMissPosition();
+		
+		///FOR VERTICAL
+		columnRef.setMissPosition();
+		
+	}
+	
+	public boolean full(){
+		
+		return (checkVert() && checkHori() && checkSq());
+	}
+	
+	public void setBoxMiss(int x,int y,int z) {
+		ArrayList<Integer> miss = compareMiss(x,y,z);
+		if(miss.size()==1){
+			try {
+				sudoku[x][y][z].setBoxValue(miss.get(0));
+				Box.solved++;
+				System.out.println(this.toString());
+				printSudoku();
+				System.out.println();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}else if(miss.size()>1){
+			sudoku[x][y][z].setMissArray(miss);
+			//System.err.println(x+"\t"+y+"\t"+z+"\tmiss>1");
+		}
+	}
+	
+	public boolean checkVert(){//OSHI
+	
+		for(int x = 1;x<10;x++){
+			if (checkVertical(x)==false)
+				return false;
+		} 
+		return true;
+	}
+	
+	public boolean checkHori(){
+
+		for(int x = 1;x<10;x++){
+			if (checkHorizontal(x)==false)
+				return false;
+		} 
+		return true;
+	}
+	
+	public boolean checkSq(){
+		for(int x = 1;x<10;x++){
+			if (checkSquare(x)==false)
+				return false;
+		} 
+		return true;
+	}
+	
+
+	
+	public ArrayList<Integer> compareMiss(int x,int y,int z ){
+		ArrayList<Integer> miss = new ArrayList<Integer>(2);
+		ArrayList<Integer> vert = getVerticalMiss(x,y,z);
+		ArrayList<Integer> hori = getHorizontalMiss(x,y,z);
+		ArrayList<Integer> square = getSquareMiss(x,y,z);
+		//System.err.println(x+"\t"+y+"\t"+z+"\t"+vert);
+		//System.err.println(x+"\t"+y+"\t"+z+"\t"+hori);
+		//System.out.println(x+"\t"+y+"\t"+z+"\t"+square);
+		for(int value : square){
+			if(hori.contains(value)&&vert.contains(value))
+				miss.add(value);
+		}
+		return miss;
+	}
+	
+	public boolean checkVertical(int x){
+		boolean complete = true;
+		int sum=0;
+		int z=(x-1)%3;
+		x=x/3;
+		int vert = (x % 3)-3;
+		for(int i=1;i<10;i++){
+			if((i-1)%3==0)
+				vert+=3;
+			//if the value in the vertical box is valid, then sum up
+			//System.out.println(vert+"\t"+(i-1)%3+"\t"+(z));
+			sum+=sudoku[vert][(i-1)%3][z].getBoxValue();
+			
+		}
+		if(sum!=45)
+			complete = false;
+		return complete;
+	}
+	
+	public boolean checkHorizontal(int x){
+		boolean complete = true;
+		int sum=0;
+		int hori = ((x<4)?-1:(x<7)?2:5);
+		int y=(x-1)%3;
+		for(int i=1;i<10;i++){
+			if((i-1)%3==0)
+				hori++;
+			sum+=sudoku[hori][y][(i-1)%3].getBoxValue();
+		}
+		if(sum!=45)
+			complete = false;
+		return complete;
+	}
+	
+	public boolean checkSquare(int x){
+		boolean complete = true;
+		int sum=0;
+		int square = -1;
+		for(int i=1;i<10;i++){
+			if((i-1)%3==0)
+				square++;
+			sum+=sudoku[x-1][square][(i-1)%3].getBoxValue();		
+		}
+		if(sum!=45)
+			complete = false;
+		return complete;
+	}
+	
+	public ArrayList<Integer> getVerticalMiss(int x,int y,int z ){
+		ArrayList<Integer> miss = new ArrayList<Integer>();
+		for(int i=1;i<10;i++)
+			miss.add(i);
+		int vert = (x % 3)-3;
+		for(int i=1;i<10;i++){
+			if((i-1)%3==0)
+				vert+=3;
+			int number = sudoku[vert][(i-1)%3][z].getBoxValue(); 
+			//if the value in the vertical box is valid, then remove from the miss vertValues
+			if(number>0) 
+				miss.remove((Integer)number);
+		}
+		return miss;
+	}
+	
+	public ArrayList<Integer> getHorizontalMiss(int x,int y,int z ){
+		ArrayList<Integer> miss = new ArrayList<Integer>();
+		for(int i=1;i<10;i++)
+			miss.add(i);
+		int hori = ((x<3)?-1:(x<6)?2:5);
+		for(int i=1;i<10;i++){
+			if((i-1)%3==0)
+				hori++;
+			int number = sudoku[hori][y][(i-1)%3].getBoxValue();
+			if(number>0)
+				miss.remove((Integer)number);
+		}
+		return miss;
+	}
+	
+	public ArrayList<Integer> getSquareMiss(int x,int y,int z ){
+		ArrayList<Integer> miss = new ArrayList<Integer>();
+		for(int i=1;i<10;i++)
+			miss.add(i);
+		int square = -1;
+		for(int i=1;i<10;i++){
+			if((i-1)%3==0)
+				square++;
+			//System.err.println(x+"\t"+square+"\t"+(i-1)%3+"\t");
+			int number = sudoku[x][square][(i-1)%3].getBoxValue();
+			//System.out.println("ChkSquare: "+square+""+number);
+			if(number>0)
+				miss.remove((Integer)number);
+		}
+		return miss;
+	}
+	
+	public String toString(){
+		
+		return String.format("%s: %d", "Solved",Box.solved);
+	}
+
+}
+
+
+
+class Column extends SudokuBoard{
+	ArrayList<ArrayList<ArrayList<Integer>>> col = new ArrayList<>();
+	
+	public void Column(){
+			for(int i=0;i<9;i++){
+				col.add(new ArrayList<>());
+				int vert = (i / 3)-3;
+				
+				for(int j=0;j<9;j++){
+					if((j)%3==0)
+						vert+=3;
+					//col.get(i).add(new ArrayList<>());
+					col.get(i).add(sudoku[vert][(j)%3][(i%3)].getMissValue());
+					
+				}
+	
+			}
+	}
+	
+	public void setMissPosition(){
+		colMissPosition = new ArrayList<>();
+		///FOR VERTICAL
+		for(int x=0;x<9;x++){
+			ArrayList<ArrayList<Integer>> col = new ArrayList<>();
+			for(int i=0;i<9;i++){
+				col.add(new ArrayList<>());
+				int vert = (x / 3)-3;
+				for(int j=1;j<10;j++){
+					if((j-1)%3==0)
+						vert+=3;
+					if (sudoku[vert][(j-1)%3][(x%3)].getMissValue().contains((Integer)(i+1)) )
+						col.get(i).add(j-1);
+					
+				}
+			}
+			colMissPosition.add(col);
+		}
+	}
+	
+}
+
+class Row extends SudokuBoard{
+	ArrayList<ArrayList<ArrayList<Integer>>> row = new ArrayList<>();
+	
+	public void Row(){
+		for(int i=0;i<9;i++){
+			row.add(new ArrayList<>());
+			int hori = ((i<3)?-1:(i<6)?2:5);
+			for(int j=0;j<9;j++){
+				if((j)%3==0)
+					hori++;
+				//row.get(i).add(new ArrayList<>());
+				row.get(i).add(sudoku[hori][(i%3)][(j)%3].getMissValue());
+				
+			}
+	
+		}
+			
+	}
+	
+	public void setMissPosition(){
+		rowMissPosition = new ArrayList<>();
+		//FOR HORIZONTAL
+		for(int x=0;x<9;x++){
+			ArrayList<ArrayList<Integer>> row = new ArrayList<>();
+			for(int i=0;i<9;i++){
+				row.add(new ArrayList<>());
+				int hori = ((x<3)?-1:(x<6)?2:5);
+				for(int j=1;j<10;j++){
+					if((j-1)%3==0)
+						hori++;
+					if (sudoku[hori][(x%3)][(j-1)%3].getMissValue().contains((Integer)(i+1)) )
+						row.get(i).add(j-1);
+					
+				}
+			}
+			rowMissPosition.add(row);
+		}
+	}
+	
+}
+
+
+class Square extends SudokuBoard{
+	ArrayList<ArrayList<ArrayList<Integer>>> square = new ArrayList<>();
+	
+	public void Square(){
+		for(int i=0;i<9;i++){
+			square.add(new ArrayList<>());
+			int row=-1;
+			for(int j=0;j<9;j++){
+				if((j)%3==0)
+					row++;
+				//row.get(i).add(new ArrayList<>());
+				square.get(i).add(sudoku[i][row][(j)%3].getMissValue());
+				
+			}
+	
+		}
+			
+	}
+	
+	public void setMissPosition(){
+		boxMissPosition = new ArrayList<>();
+		//FOR BOX
+		for(int x=0;x<9;x++){
+		ArrayList<ArrayList<Integer>> box = new ArrayList<>();
+		for(int i=0;i<9;i++){
+			box.add(new ArrayList<>());
+			int row = -1;
+			for(int j =1;j<10;j++){
+				if((j-1)%3==0)
+					row++;
+				if (sudoku[x][row][(j-1)%3].getMissValue().contains((Integer)(i+1)) )
+					box.get(i).add(j-1);
+			}
+		}
+		boxMissPosition.add(box);
+		}
+	}
+	
+}

@@ -1,0 +1,88 @@
+import java.util.*;
+public class sml {
+	private static int[] registry = new int[100];
+	private static int accumulator;
+	private static int input;
+	private static int location=00;
+	private static int operation;
+	private static int operand;
+	static final int READ =10;
+	static final int WRITE =11;
+	static final int LOAD =20;
+	static final int STORE =21;
+	static final int ADD =30;
+	static final int SUBTRACT =31;
+	static final int DIVIDE =32;
+	static final int MULTIPLY =33;
+	static final int BRANCH =40;
+	static final int BRANCHING =41;
+	static final int BRANCHZERO =42;
+	static final int HALT =43;
+	static Scanner in = new Scanner(System.in);
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		operate();
+	}
+	
+	public static void operate(){
+		System.out.println("WELCOME TO SML...ENTER YOUR INSTRUCTIONS BELOW-->>>");
+		do{
+			System.out.printf("+4300 to exit...%2d:",location);
+			input = in.nextInt();
+			operation = input/100;
+			operand = input%100;
+			proccess();
+		}while(location++<100);
+	}
+	
+	public static void proccess(){
+		try{
+			switch(operation){
+			case READ:
+				System.out.print("Enter number you want to write:");
+				registry[operand]= in.nextInt();
+				break;
+			case WRITE:
+				System.out.printf("Number is %d\n",registry[operand]);
+				break;
+			case LOAD:
+				accumulator = registry[operand];
+				break;
+			case STORE:
+				registry[operand] = accumulator;
+				break;
+			case ADD:
+				accumulator += registry[operand];
+				break;
+			case SUBTRACT:
+				accumulator -= registry[operand];
+				break;
+			case DIVIDE:
+				accumulator /= registry[operand];
+				break;
+			case MULTIPLY:
+				accumulator = registry[operand];
+				break;
+			case BRANCH:
+				location = operand-1;
+				break;
+			case BRANCHING:
+				if(accumulator<0)
+					location = operand-1;
+				break;
+			case BRANCHZERO:
+				if(accumulator==0)
+					location = operand-1;
+				break;
+			case HALT:
+				System.exit(0);
+				break;
+			default:
+				location = operand;
+			}
+		}catch(ArrayIndexOutOfBoundsException e){
+			System.out.println("You have no access to the location you are trying to access!!!");
+		}
+	}
+}

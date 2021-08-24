@@ -1,0 +1,9 @@
+package objectOriented;
+
+public class panel {
+
+	public panel() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

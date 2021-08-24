@@ -1,0 +1,32 @@
+package objectOriented;
+
+public class ch10Test {
+
+	public static void main(String[] args) {
+		
+		
+	}
+
+}
+
+abstract class Shape{ 
+	
+	private double length;
+	
+	abstract double area();
+	
+	public abstract String toString();
+	
+}
+
+abstract class twoDimensionalShape extends Shape{
+	
+}
+
+abstract class threeDimensionalShape extends Shape{
+	private double radius; 
+	
+	abstract double volume();
+	
+}
+

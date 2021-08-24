@@ -1,0 +1,183 @@
+package objectOriented;
+
+
+public class SalariedEmployee extends Employee{
+
+	private double weeklySalary;
+	
+	public SalariedEmployee(String first, String last, String ssn,double salary) {
+		super(first, last, ssn);
+		setWeeklySalary(salary);
+	}
+	
+	public void setWeeklySalary(double salary){
+		if(salary>=0.0)
+			weeklySalary = salary;
+		else
+			throw new IllegalArgumentException("weekly salary must be >=0.0");	
+	}
+	
+	public double getWeeklySalary(){
+		return weeklySalary;
+	}
+	
+	@Override
+	public double earnings(){
+		return getWeeklySalary();
+	}
+	
+	@Override
+	public String toString(){
+		return String.format("salried employee: %s\n%s: $%,.2f", 
+				super.toString(),"weekly salary",getWeeklySalary());
+	}
+	
+}
+
+//HOURLY EMPLOYEE
+class HourlyEmployee extends Employee{
+
+	private double wage;
+	private double hours;
+	
+	public HourlyEmployee(String first, String last, String ssn,double hrWage,double hrWorked) {
+		super(first, last, ssn);
+		setWage(hrWage);
+		setHours(hrWorked);
+	}
+	
+	private void setWage(double hrWage){
+		if(hrWage>=0.0)
+			wage = hrWage;
+		else throw new IllegalArgumentException("Wage must be >=0.0");
+	}
+	
+	private double getWage(){
+		return wage;
+	}
+	
+	public void setHours(double hour){
+		if(hour>=0.0&&hour<=168.0)
+			hours = hour;
+		else
+			throw new IllegalArgumentException("hours worked must be >=0.0 and <=168.0");	
+	}
+	
+	public double getHours(){
+		return hours;
+	}
+	
+	@Override
+	public double earnings(){
+		if(getHours()<=40)
+			return getWage()*getHours();
+		else
+			return 40 * getWage() + (getHours()-40)*getWage()*1.5;
+	}
+	
+	@Override
+	public String toString(){
+		return String.format("salried employee: %s\n%s: $%,.2f; %s: %,.2f", 
+				super.toString(),"hourly wage",getWage(),"hours worked",getHours());
+	}
+	
+}
+
+//SALARIED EMPLOYEE
+class CommissionEmployee extends Employee {
+
+	private double grossSales;
+	private double comissionRate;
+	
+	public CommissionEmployee(String first,String last,String ssn,
+			double sales,double rate) 
+	{
+		//implicit call to object constructor occurs here
+		super(first,last,ssn);
+		setGrossSales(sales);
+		setCommissionRate(rate);
+	}
+	
+	public void setGrossSales(double sales){
+		if(sales>=0.0)
+			grossSales = sales;
+		else
+			throw new IllegalArgumentException("Gross sales must be >= 0.0");
+	}
+	
+	public double getGrossSales(){
+		return grossSales;
+	}
+	
+	public void setCommissionRate(double rates){
+		if(rates>0.0 && rates<1.0)
+			comissionRate = rates;
+		else
+			throw new IllegalArgumentException("comission rates must be > 0.0 and <1.0");
+	}
+	
+	public double getCommissionRate(){
+		return comissionRate;
+	}
+	
+	@Override
+	public double earnings(){
+		return getCommissionRate() * getGrossSales();
+	}
+	
+	@Override
+	public String toString(){
+		return String.format("%s: %s\n%s: %,.2f\n%s: %.2f", 
+				"commission employee",super.toString(), 
+				"gross sales", getGrossSales(),
+				"commissionRate", getCommissionRate());
+	}
+}
+
+
+//INDIRECT CONCRETE SUBCLASS BASECOMMISSIONEMPLOYEE
+class BasePlusCommissionEmpolyee extends CommissionEmployee{
+
+	private double baseSalary;
+	
+	public BasePlusCommissionEmpolyee(String first, String last, String ssn,
+			double sales,double rates,double salary) {
+		super(first, last, ssn,sales,rates);
+		setBaseSalary(salary);
+	}
+	
+	public void setBaseSalary(double salary){
+		if(salary>=0.0)
+			baseSalary = salary;
+		else
+			throw new IllegalArgumentException("Base salary must be >=0.0");	
+	}
+	
+	public double getBaseSalary(){
+		return baseSalary;
+	}
+	
+	@Override
+	public double earnings(){
+		return getBaseSalary()+super.earnings();
+	}
+	
+	@Override
+	public String toString(){
+		return String.format("%s %s; %s: $%,.2f",
+				"base-salried",super.toString(),
+				"base salary",getBaseSalary());
+	}
+	
+}
+
+
+//PAYROLL SYSTEM
+class PayrollSystemTest{
+	
+	//create subclass objects 
+	SalariedEmployee sal = new SalariedEmployee("Adesina","Jones","222-22-2222",1000.0);
+	HourlyEmployee hour = new HourlyEmployee("Sina","Bones","333-22-2222",18.89,40);
+	CommissionEmployee com = new CommissionEmployee("Kane","Mide","444-22-2222",10000,.06);
+	
+}

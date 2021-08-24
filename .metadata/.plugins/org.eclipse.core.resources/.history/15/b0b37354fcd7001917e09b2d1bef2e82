@@ -1,0 +1,19 @@
+package objectOriented;
+import java.util.Random;
+
+public class telemetry {
+
+	public static void main(String[] args) {
+		int percentage,power,current,volt;
+		
+		Random ran = new Random();
+		
+		percentage = 39+ran.nextInt(36);
+		power = 10+ran.nextInt(6);
+		volt=(power>20?18:(15+ran.nextInt(3)));
+		current =(int) Math.round((double)power/volt);
+		System.out.printf("%d%%\t%dA\t%dV\t%dW",percentage,current,volt,power);
+
+	}
+
+}

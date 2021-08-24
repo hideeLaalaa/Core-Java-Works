@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;percentage&apos; in &apos;objectOriented.telemetry.main(...)&apos; to &apos;soc&apos;&#x0D;&#x0A;- Original project: &apos;Polymorphism&apos;&#x0D;&#x0A;- Original element: &apos;objectOriented.telemetry.main(String[]).percentage&apos;&#x0D;&#x0A;- Renamed element: &apos;percentage&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;percentage&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;objectOriented{telemetry.java[telemetry~main~\[QString;@percentage!130!165!134!143!I!0!false" name="soc" references="true" stamp="1568555480584" version="1.0"/>
+</session>

@@ -1,0 +1,156 @@
+package objectOriented;
+import java.util.Random;
+
+public class telemetry {
+	
+	public static void main(String[] args) {		
+		
+		
+//		soc = 39+ran.nextInt(36);
+//		power = 10+ran.nextInt(6);
+//		volt=(power>20?18:(15+ran.nextInt(3)));
+//		current =(int) Math.round((double)power/volt);
+//		System.out.printf("%d%%\t%dA\t%dV\t%dW\n",soc,current,volt,power);
+		
+		panel solarP[] = new panel[15]; 
+		
+		for(int hour=1;hour<13;hour++){
+			for(int pan=0;pan<solarP.length;pan++){
+				solarP[pan].dayTime(hour);
+				System.out.print("\t\t");
+			}
+			System.out.println();	
+		}
+	
+	
+	}
+	
+}
+	
+class panel{
+		
+	 static int soc,power, current, volt;
+	static Random ran = new Random();
+		
+		public panel(){
+			
+		}
+		
+		public static void dayTime(int hour){
+			
+			
+			switch(hour){
+			
+			case 1: {
+				soc = 39+ran.nextInt(36);
+				power = 10+ran.nextInt(6);
+				volt=(power>20?18:(15+ran.nextInt(3)));
+				current =(int) Math.round((double)power/volt);
+			}break;
+			
+			case 2: {
+				power = 14+ran.nextInt(9);
+				soc = soc+incrSoc(power);
+				volt=(power>20?18:(15+ran.nextInt(3)));
+				current =(int) Math.round((double)power/volt);
+			}break;
+			
+			case 3: {
+				power = 17+ran.nextInt(10);
+				soc = soc+incrSoc(power);
+				volt=(power>20?18:(15+ran.nextInt(3)));
+				current =(int) Math.round((double)power/volt);
+			}break;
+			
+			case 4: {
+				power = 22+ran.nextInt(8);
+				soc = soc+incrSoc(power);
+				volt=(power>20?18:(15+ran.nextInt(3)));
+				current =(int) Math.round((double)power/volt);
+			}break;
+			
+			case 5: {
+				power = 18+ran.nextInt(12);
+				soc = soc+incrSoc(power);
+				volt=(power>20?18:(15+ran.nextInt(3)));
+				current =(int) Math.round((double)power/volt);
+			}break;
+			
+			case 6: {
+				power = 25+ran.nextInt(10);
+				soc = soc+incrSoc(power);
+				volt=(power>20?18:(15+ran.nextInt(3)));
+				current =(int) Math.round((double)power/volt);
+			}break;
+			
+			case 7: {
+				power = 20+ran.nextInt(38);
+				soc = soc+incrSoc(power);
+				volt=(power>20?18:(15+ran.nextInt(3)));
+				current =(int) Math.round((double)power/volt);
+			}break;
+			
+			case 8: {
+				power = 20+ran.nextInt(38);
+				soc = soc+incrSoc(power);
+				volt=(power>20?18:(15+ran.nextInt(3)));
+				current =(int) Math.round((double)power/volt);
+			}break;
+			
+			case 9: {
+				power = 20+ran.nextInt(38);
+				soc = soc+incrSoc(power);
+				volt=(power>20?18:(15+ran.nextInt(3)));
+				current =(int) Math.round((double)power/volt);
+			}break;
+			
+			case 10: {
+				power = 20+ran.nextInt(20);
+				soc = soc+incrSoc(power);
+				volt=(power>20?18:(15+ran.nextInt(3)));
+				current =(int) Math.round((double)power/volt);
+			}break;
+			
+			case 11: {
+				power = 20+ran.nextInt(10);
+				soc = soc+incrSoc(power);
+				volt=(power>20?18:(15+ran.nextInt(3)));
+				current =(int) Math.round((double)power/volt);
+			}break;
+			
+			case 12: {
+				power = 14+ran.nextInt(9);
+				soc = soc+incrSoc(power);
+				volt=(power>20?18:(15+ran.nextInt(3)));
+				current =(int) Math.round((double)power/volt);
+			}break;
+		}
+			soc=(soc>100?100:soc);
+			System.out.printf("%d%%\t%dA\t%dV\t%dW",soc,current,volt,power);
+			
+
+	}
+
+		private static int incrSoc(int power) {
+			int incr = 0;
+			
+				if (power%10<6)
+					incr = ran.nextInt(1);
+				if (power%16<7)
+					incr = 2+ran.nextInt(1);
+				if (power%23<8)
+					incr = 3+ran.nextInt(2);
+				if (power%31<8)
+					incr = 5+ran.nextInt(3);
+				if (power%38<9)
+					incr = 7+ran.nextInt(5);
+				if (power%47<7)
+					incr = 10+ran.nextInt(2);
+				if (power%54<5)
+					incr = 12+ran.nextInt(3);
+			
+			return incr;
+		}
+
+		
+	}

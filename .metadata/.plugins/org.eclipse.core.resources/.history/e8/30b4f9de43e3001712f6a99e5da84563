@@ -1,0 +1,171 @@
+//knight's tour on a chess board...
+import java.util.Random;
+import java.util.Scanner;
+
+public class knights {
+	private final int hori=8;
+	private final int vert=8;
+	private int[][] chess = new int[vert][hori];
+	private int[] start = new int[2];
+	private Random ran = new Random();
+	private int[][] access = new int[8][8];
+
+	public knights() {
+	
+	}
+	
+	public void move(){
+		start [0]=0;start[1]=0;
+		int count =1;int falsity=1;
+		chess[start[0]][start[1]]=count;
+		while(falsity<=200){
+			tour();
+			switch(min()){
+			case 0: 
+				if(start[0]-1>=0&&start[1]+2<8&&chess[start[0]-1][start[1]+2]<1){
+				start[0]-=1;
+				start[1]+=2;}
+				break;
+			case 1: 
+				if(start[0]-2>=0&&start[1]+1<8&&chess[start[0]-2][start[1]+1]<1){
+				start[0]-=2;
+				start[1]+=1;}
+				break;
+			case  2: 
+				if(start[0]-2>=0&&start[1]-1>=0&&chess[start[0]-2][start[1]-1]<1){
+				start[0]-=2;
+				start[1]-=1;}
+				break;
+			case 3:
+				if(start[0]-1>=0&&start[1]-2>=0&&chess[start[0]-1][start[1]-2]<1){
+				start[0]-=1;
+				start[1]-=2;}
+				break;
+			case 4:
+				if(start[0]+1<8&&start[1]-2>=0&&chess[start[0]+1][start[1]-2]<1){
+				start[0]+=1;
+				start[1]-=2;}
+				break;
+			case 5:
+				if(start[0]+2<8&&start[1]-1>=0&&chess[start[0]+2][start[1]-1]<1){
+				start[0]+=2;
+				start[1]-=1;}
+				break;
+			case 6:
+				if(start[0]+2<8&&start[1]+1<8&&chess[start[0]+2][start[1]+1]<1){
+				start[0]+=2;
+				start[1]+=1;}
+				break;
+			case 7:
+				if(start[0]+1<8&&start[1]+2<8&&chess[start[0]+1][start[1]+2]<1){
+				start[0]+=1;
+				start[1]+=2;}
+				break;
+				}
+			
+			if(chess[start[0]][start[1]]<1){
+				chess[start[0]][start[1]]=++count;
+			}
+			else
+				falsity++;
+			
+		}//end while
+	}//end method move 
+	
+	public void board(){
+		for(int i=0;i<chess.length;i++){
+			System.out.print("|");
+			for(int j=0;j<chess[i].length;j++)
+				System.out.printf("%3d   ",chess[i][j]);
+			System.out.println("|\n");
+		}
+		System.out.print("Accessibility status\n\n");
+		for(int i=0;i<access.length;i++){
+			System.out.print("|");
+			for(int j=0;j<access[i].length;j++)
+				System.out.printf("%3d   ",access[i][j]);
+			System.out.println("|\n");
+		}
+	}
+	
+	public int min(){
+		int min =10;
+					if(start[0]-1>=0&&start[1]+2<8&&chess[start[0]-1][start[1]+2]<1){
+						if(access[start[0]-1][start[1]+2]<min)
+							min=0;}
+				 
+					if(start[0]-2>=0&&start[1]+1<8&&chess[start[0]-2][start[1]+1]<1)
+					{	if(access[start[0]-2][start[1]+1]<min)
+							min=1;
+					}
+					if(start[0]-2>=0&&start[1]-1>=0&&chess[start[0]-2][start[1]-1]<1)
+					{	if(access[start[0]-2][start[1]-1]<min)
+							min=2;
+					}
+					if(start[0]-1>=0&&start[1]-2>=0&&chess[start[0]-1][start[1]-2]<1)
+					{	if(access[start[0]-1][start[1]-2]<min)
+							min=3;
+					}
+					if(start[0]+1<8&&start[1]-2>=0&&chess[start[0]+1][start[1]-2]<1)
+					{	if(access[start[0]+1][start[1]-2]<min)
+							min=4;
+					}
+					if(start[0]+2<8&&start[1]-1>=0&&chess[start[0]+2][start[1]-1]<1)
+					{	if(access[start[0]+2][start[1]-1]<min)
+							min=5;
+					}
+					if(start[0]+2<8&&start[1]+1<8&&chess[start[0]+2][start[1]+1]<1)
+					{	if(access[start[0]+2][start[1]+1]<min)
+							min=6;
+					}
+					if(start[0]+1<8&&start[1]+2<8&&chess[start[0]+1][start[1]+2]<1)
+					{	if(access[start[0]+1][start[1]+2]<min)
+							min=7;
+					}return min;
+			}
+	
+	
+	public void tour(){
+		for(int i=0;i<access.length;i++){
+			for(int j=0;j<access[i].length;j++){
+				start[0]=i;start[1]=i;
+			switch(i){
+			case 0:
+				if(start[0]-1>=0&&start[1]+2<8&&chess[start[0]-1][start[1]+2]<1)
+					access[i][j]+=1;
+					break;
+				case 1: 
+					if(start[0]-2>=0&&start[1]+1<8&&chess[start[0]-2][start[1]+1]<1)
+						access[i][j]+=1;
+					break;
+				case  2: 
+					if(start[0]-2>=0&&start[1]-1>=0&&chess[start[0]-2][start[1]-1]<1)
+						access[i][j]+=1;
+					break;
+				case 3:
+					if(start[0]-1>=0&&start[1]-2>=0&&chess[start[0]-1][start[1]-2]<1)
+						access[i][j]+=1;
+					break;
+				case 4:
+					if(start[0]+1<8&&start[1]-2>=0&&chess[start[0]+1][start[1]-2]<1)
+						access[i][j]+=1;
+					break;
+				case 5:
+					if(start[0]+2<8&&start[1]-1>=0&&chess[start[0]+2][start[1]-1]<1)
+						access[i][j]+=1;
+					break;
+				case 6:
+					if(start[0]+2<8&&start[1]+1<8&&chess[start[0]+2][start[1]+1]<1)
+						access[i][j]+=1;
+					break;
+				case 7:
+					if(start[0]+1<8&&start[1]+2<8&&chess[start[0]+1][start[1]+2]<1)
+						access[i][j]+=1;
+					break;
+			}
+		}
+		}
+		
+	}
+
+}

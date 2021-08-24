@@ -1,0 +1,29 @@
+package objectOriented;
+import java.util.Random;
+
+public class telemetry {
+	
+	public static void main(String[] args) {		
+		
+		
+//		soc = 39+ran.nextInt(36);
+//		power = 10+ran.nextInt(6);
+//		volt=(power>20?18:(15+ran.nextInt(3)));
+//		current =(int) Math.round((double)power/volt);
+//		System.out.printf("%d%%\t%dA\t%dV\t%dW\n",soc,current,volt,power);
+		
+		panel solarP[] = new panel[15]; 
+		
+		for(int hour=1;hour<13;hour++){
+			for(int pan=0;pan<solarP.length;pan++){
+				solarP[pan].dayTime(hour);
+				System.out.print("\t\t");
+			}
+			System.out.println();	
+		}
+	
+	
+	}
+	
+}
+
